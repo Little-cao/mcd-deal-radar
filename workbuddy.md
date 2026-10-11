@@ -1,4 +1,4 @@
-# 使用 WorkBuddy 开发「麦当劳订阅雷达」
+# 使用 WorkBuddy 开发「麦当劳全天候助手」
 
 本文件记录本项目在 **腾讯 WorkBuddy** 中的开发对话上下文，
 用于核验是否符合「麦当劳程序员节创意开发大赛 × WorkBuddy 联动活动」的奖励条件。
@@ -60,7 +60,7 @@
 ### 4. 最终形态
 
 > **WorkBuddy**：产出一个**纯 Skill、零脚本、可被其他技能调用**的项目：
-> - `skills/mcd-deal-radar/SKILL.md`：定义智能体的行为（解析订阅、创建定时任务、调用 MCP、发邮件）；
+> - `skills/mcd-all-weather-assistant/SKILL.md`：定义智能体的行为（解析订阅、创建定时任务、调用 MCP、发邮件）；
 > - 配套 README / MCP_INTEGRATION / mcp-config.example.json / CONTEST_DECLARATION / 两份 docs。
 
 ### 5. 需求迭代三：检查频率改为「用户可输入」
@@ -260,7 +260,7 @@
    登录并申请 MCP Token（每位用户需自行申请）；
 2. 在 WorkBuddy 中配置麦当劳 MCP 连接器（见 `mcp-config.example.json`，
    将 Token 填入配置）；
-3. 加载 `skills/mcd-deal-radar/SKILL.md`；
+3. 加载 `skills/mcd-all-weather-assistant/SKILL.md`；
 4. 对话：「帮我订阅巨无霸套餐，有新品或降价就发我邮箱 me@qq.com」；
 5. 智能体确认后创建定时任务（每天 12:00 / 24:00），后续自动检查与推送。
 

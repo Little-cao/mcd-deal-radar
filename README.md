@@ -1,4 +1,4 @@
-# 麦当劳订阅雷达 · mcd-deal-radar
+# 麦当劳全天候助手 · mcd-all-weather-assistant
 
 > 一句话：**你订阅什么，就帮你盯着什么——一出新品、一降价、一发券、一有新活动，就发邮件通知你；
 > 还能按你订阅的范围自动领券，以及定时点餐（到点帮你把单下好、把麦当劳 App 付款链接发给你）。**
@@ -209,7 +209,7 @@
 ## 📁 项目结构
 
 ```
-mcd-deal-radar/
+mcd-all-weather-assistant/
 ├── README.md                    # 本文件：介绍、使用、目标用户
 ├── CONTEST_DECLARATION.md       # 参赛声明（官方原文，未改动）
 ├── MCP_INTEGRATION.md           # 使用的 MCP Server / Tool / 调用流程 / 业务价值
@@ -217,7 +217,7 @@ mcd-deal-radar/
 ├── workbuddy.md                 # WorkBuddy 开发对话上下文（专项奖励用）
 ├── SUBMIT.md                    # 参赛提交指引（报名 Issue 模板 / 检查清单，不参与评审）
 ├── skills/
-│   └── mcd-deal-radar/
+│   └── mcd-all-weather-assistant/
 │       └── SKILL.md             # ★ Skill 本体：引导配置 + 订阅 / 查询 / 推送 / 定时点餐
 └── docs/
     ├── scheduled-task.md        # 定时任务配置指南（12:00 / 24:00）

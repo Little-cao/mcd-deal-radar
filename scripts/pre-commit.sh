@@ -1,5 +1,5 @@
 #!/bin/sh
-# mcd-deal-radar 文档健康检查
+# mcd-all-weather-assistant 文档健康检查
 # 背景：本项目的 SKILL.md 曾多次被 Markdown 格式化工具破坏——
 #   1) frontmatter 的 --- 被转义成 \---（导致 skill 无法被识别）
 #   2) 大量行尾双空格被注入
@@ -44,7 +44,7 @@ for f in $STAGED_MD; do
 done
 
 # SKILL.md 专项检查：frontmatter 必须以 --- 开头且 YAML 可解析
-SKILL="skills/mcd-deal-radar/SKILL.md"
+SKILL="skills/mcd-all-weather-assistant/SKILL.md"
 if git diff --cached --name-only | grep -q "^$SKILL$" && [ -f "$SKILL" ]; then
     if ! head -1 "$SKILL" | grep -q '^---$'; then
         echo "❌ [$SKILL] 第一行必须是 ---（frontmatter 起始符）"
