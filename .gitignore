@@ -1,0 +1,9 @@
+.env
+*.log
+.DS_Store
+
+# JetBrains IDE
+.idea/
+
+# 参赛提交指引（不参与评审，不提交）
+SUBMIT.md

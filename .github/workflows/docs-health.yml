@@ -1,0 +1,84 @@
+name: docs-health
+
+# 文档健康检查：防止 Markdown 格式化工具破坏文档
+# 背景：SKILL.md 曾多次被格式化工具污染（\--- 转义导致 frontmatter 失效、
+# 行尾双空格注入），本地 pre-commit hook 之外再加一道云端防线。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 PyYAML（用于校验 frontmatter）
+        run: pip install pyyaml
+
+      - name: 检查 \--- 转义
+        run: |
+          if grep -rn '\\---' --include='*.md' .; then
+            echo "❌ 发现 \\--- 转义（会破坏 frontmatter/分隔线）"
+            exit 1
+          fi
+          echo "✅ 无 \\--- 转义"
+
+      - name: 检查行尾双空格
+        run: |
+          FOUND=0
+          for f in $(find . -name '*.md' -not -path './.git/*'); do
+            N=$(grep -c ' $' "$f" || true)
+            if [ "${N:-0}" -gt 0 ]; then
+              echo "❌ [$f] 有 $N 处行尾双空格"
+              FOUND=1
+            fi
+          done
+          [ "$FOUND" -eq 0 ] && echo "✅ 无行尾双空格" || exit 1
+
+      - name: 检查 \* 转义
+        run: |
+          if grep -rn '\\\*' --include='*.md' .; then
+            echo "❌ 发现 \\* 转义（会破坏加粗）"
+            exit 1
+          fi
+          echo "✅ 无 \\* 转义"
+
+      - name: 校验 SKILL.md frontmatter（YAML 可解析 + name/description 完整）
+        run: |
+          python3 - <<'EOF'
+          import yaml, sys
+          p = 'skills/mcd-deal-radar/SKILL.md'
+          s = open(p, encoding='utf-8').read()
+          assert s.startswith('---\n'), 'SKILL.md 必须以 --- 开头'
+          parts = s.split('---')
+          assert len(parts) >= 3, 'frontmatter 不完整'
+          d = yaml.safe_load(parts[1])
+          assert isinstance(d, dict), 'frontmatter 不是合法 YAML 映射'
+          assert d.get('name'), 'name 缺失'
+          assert d.get('description'), 'description 缺失'
+          assert '\n' not in str(d.get('description', '')), 'description 必须单行'
+          print(f"✅ frontmatter 合法：name={d['name']}")
+          EOF
+
+      - name: 检查交付物是否齐全（参赛要求）
+        run: |
+          for f in README.md CONTEST_DECLARATION.md MCP_INTEGRATION.md workbuddy.md \
+                   mcp-config.example.json skills/mcd-deal-radar/SKILL.md; do
+            if [ ! -f "$f" ]; then
+              echo "❌ 缺少参赛必需文件：$f"
+              exit 1
+            fi
+          done
+          echo "✅ 交付物齐全"
+
+      - name: 检查真实 Token 泄漏
+        run: |
+          # 只允许占位符 YOUR_MCP_TOKEN / ${MCD_MCP_TOKEN} / {用户提供的 Token}
+          if grep -rnE 'Bearer [A-Za-z0-9_\-]{16,}' --include='*.md' --include='*.json' --include='*.sh' --include='*.yml' .; then
+            echo "❌ 疑似真实 Token 泄漏"
+            exit 1
+          fi
+          echo "✅ 无 Token 泄漏"
